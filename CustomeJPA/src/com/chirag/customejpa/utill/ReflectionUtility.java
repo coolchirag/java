@@ -45,4 +45,10 @@ public class ReflectionUtility {
 		PropertyDescriptor pd = new PropertyDescriptor(fieldName, obj.getClass());
 		return pd.getReadMethod().invoke(obj);
 	}
+	
+	public static void callSetter(Object obj, String fieldName, Object[] args) throws IntrospectionException, IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		PropertyDescriptor pd = new PropertyDescriptor(fieldName, obj.getClass());
+		pd.getWriteMethod().invoke(obj, args);
+	}
 }
