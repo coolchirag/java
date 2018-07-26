@@ -11,6 +11,8 @@ import java.lang.annotation.Target;
 @Repeatable(ChildReferenceInfos.class)
 public @interface ChildReferenceInfo {
 
-	Class childClass();
+	String refPropertyName();
+	//Class childClass();
 	String columnName();
+	 
 }

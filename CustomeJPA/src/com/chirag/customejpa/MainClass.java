@@ -10,19 +10,11 @@ import com.chirag.customejpa.utill.ReflectionUtility;
 
 public class MainClass {
 	
-	private List<Integer> str = new ArrayList<>();
 	
-	Integer s = null;
 	
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
 		
-		Field f = ReflectionUtility.getFieldByType(new MainClass(), Integer.class);
-		if(f != null)
-		{
-			System.out.println(f.getName());
-		} else {
-			System.out.println("no field found");
-		}
+		
 	}
 	
 	
