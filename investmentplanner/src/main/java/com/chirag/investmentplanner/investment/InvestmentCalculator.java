@@ -1,5 +1,7 @@
 package com.chirag.investmentplanner.investment;
 
+import com.chirag.investmentplanner.InterestUtility;
+
 public class InvestmentCalculator {
 
 	/**
@@ -16,11 +18,11 @@ public class InvestmentCalculator {
 		double totalAmount = amount;
 		while(currentTimePeriodInMonths<maturityPeriodInMonths)
 		{
-			totalAmount = totalAmount + calculateInterestAmount(calculateInterestRate(annualInterestRate, interestPeriodInMonths), totalAmount);
+			totalAmount = totalAmount + InterestUtility.calculateInterestAmount(InterestUtility.calculateInterestRate(annualInterestRate, interestPeriodInMonths), totalAmount);
 			currentTimePeriodInMonths = currentTimePeriodInMonths + interestPeriodInMonths;
 		}
 		currentTimePeriodInMonths = currentTimePeriodInMonths-interestPeriodInMonths;
-		totalAmount = totalAmount + calculateInterestAmount(calculateInterestRate(annualInterestRate, maturityPeriodInMonths-currentTimePeriodInMonths), totalAmount);
+		totalAmount = totalAmount + InterestUtility.calculateInterestAmount(InterestUtility.calculateInterestRate(annualInterestRate, maturityPeriodInMonths-currentTimePeriodInMonths), totalAmount);
 		
 		return new InvestmentReturnInfoBean(amount, totalAmount - amount, totalAmount);
 	}
@@ -68,13 +70,5 @@ public class InvestmentCalculator {
 		return new InvestmentReturnInfoBean(totalInvestedAmount, totalEarnedInterestAmount, totalAmount);
 	}
 	
-	private static float calculateInterestRate(float annualInterestRate, int investmentPeriodInMonths)
-	{
-		return investmentPeriodInMonths*annualInterestRate/12;
-	}
 	
-	private static double calculateInterestAmount(float interestRate, double amount)
-	{
-		return amount*interestRate/100;
-	}
 }
