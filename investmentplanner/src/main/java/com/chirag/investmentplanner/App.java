@@ -13,6 +13,6 @@ public class App
     {
         //System.out.println(InvestmentCalculator.cumulativeInterestInvestment(10000, 10, 36, 12));
         //System.out.println(InvestmentCalculator.cumulativeInterestRecurringInvestment(1000, 1000, 3, 12, 12, 10, 12));
-        System.out.println(LoanCalculator.getLoanPaymentInfo(49972, 8.75f, 5000000));
+        System.out.println(LoanCalculator.getLoanPaymentInfo(17500, 9f, 2000000, 20, 6));
     }
 }
