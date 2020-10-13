@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import ruleEngine.DataType;
 import ruleEngine.domain.DomainParser;
@@ -53,7 +51,7 @@ public class EncounterDomainParser implements DomainParser {
 		return parsedData;
 	}
 	
-	private String getParamValue(String param, Object obj) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
+	public static String getParamValue(String param, Object obj) throws Exception {
 		/*
 		 * System.out.println(
 		 * "-------------------------------------------------------------"); for(Field f
@@ -110,7 +108,7 @@ public class EncounterDomainParser implements DomainParser {
 		return dataTypeAppender(genericType)+value;
 	}
 	
-	private String dataTypeAppender(Type dataType) {
+	private static String dataTypeAppender(Type dataType) {
 		if(dataType instanceof ParameterizedType) {
 			ParameterizedType pt = (ParameterizedType) dataType;
 			dataType = pt.getActualTypeArguments()[0];

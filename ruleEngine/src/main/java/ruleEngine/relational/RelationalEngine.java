@@ -21,7 +21,7 @@ public interface RelationalEngine {
 	String GREATER_THAN = "GREATER_THAN";
 	String IS_DUPLICATE = "ISDUPLICATE";
 	String BETWEEN = "BETWEEN";
-	
+	Set<String> dualParamOperations = new HashSet<String>(Arrays.asList(EQUAL_TO, NOT_EQUAL_TO, IN, NOT_IN, LESS_THAN, GREATER_THAN, IS_DUPLICATE, BETWEEN));
 	Set<String> singleParamOperations = new HashSet<String>(Arrays.asList(IS_BLANK));
 	
 	
