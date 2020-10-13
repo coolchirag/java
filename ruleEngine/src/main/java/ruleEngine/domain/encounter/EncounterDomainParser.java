@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import ruleEngine.DataType;
 import ruleEngine.domain.DomainParser;
 import ruleEngine.domain.encounter.bean.EncounterDetailBean;
 
@@ -37,16 +38,19 @@ public class EncounterDomainParser implements DomainParser {
 
 
 	public String[] parse(String[] ruleExpression) throws Exception {
+		String[] parsedData = new String[ruleExpression.length];
+		int index = 0;
 		for(String data : ruleExpression) {
 			if(data.startsWith("param_"))
 			{
 				String param = data.substring(PARAM_INDICATER_LENGTH);
 				String value = getParamValue(param, encDetailBean);
 				System.out.println(value);
-				data = value;
+				parsedData[index] = value;
+				
 			}
 		}
-		return null;
+		return parsedData;
 	}
 	
 	private String getParamValue(String param, Object obj) throws IllegalArgumentException, IllegalAccessException, NoSuchFieldException, SecurityException {
@@ -70,19 +74,20 @@ public class EncounterDomainParser implements DomainParser {
 			field.setAccessible(true);
 			Type genericType = field.getGenericType();
 			String value;
-			if(genericType instanceof ParameterizedType) {
-				value="[";
+			if (genericType instanceof ParameterizedType) {
+				
+				value = "[";
 				Collection c = (Collection) field.get(obj);
-				for(Object data : c) {
-					value = value + getParamValue(param.substring(spliterIndex+1), data)+",";
+				for (Object data : c) {
+					value = value + getParamValue(param.substring(spliterIndex + 1), data) + ",";
 				}
-				value=value.substring(0,value.length()-1);
-				value=value+"]";
+				value = value.substring(0, value.length() - 1);
+				value = value + "]";
 			} else {
 				value = getParamValue(param.substring(spliterIndex+1), field.get(obj));
 			}
 			
-			return value;
+			return dataTypeAppender(genericType)+value;
 		}
 		
 		Field field = obj.getClass().getDeclaredField(param);
@@ -90,17 +95,27 @@ public class EncounterDomainParser implements DomainParser {
 		Type genericType = field.getGenericType();
 		String value;
 		if(genericType instanceof ParameterizedType) {
+			
 			value = "[";
 			Collection c = (Collection) field.get(obj);
 			for(Object data : c) {
+				System.out.println(data.getClass());
 				value = value + data + ",";
 			}
 			value=value.substring(0,value.length()-1);
 			value=value+"]";
 		} else {
-			value = (String) field.get(obj);
+			value =(String) field.get(obj);
 		}
-		return value;
+		return dataTypeAppender(genericType)+value;
+	}
+	
+	private String dataTypeAppender(Type dataType) {
+		if(dataType instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType) dataType;
+			dataType = pt.getActualTypeArguments()[0];
+		}
+		return "dataType_"+DataType.getDataTypeEnum((Class) dataType)+"_";
 	}
 
 }
