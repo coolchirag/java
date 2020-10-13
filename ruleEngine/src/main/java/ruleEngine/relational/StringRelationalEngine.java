@@ -47,13 +47,13 @@ public class StringRelationalEngine implements RelationalEngine {
 	}
 
 	@Override
-	public boolean performIsDuplicate(List<String> value1) {
+	public boolean performBetween(List<String> value1, List<String> value2) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean performBetween(List<String> value1, List<String> value2) {
+	public boolean performIsDuplicate(List<String> value1, List<String> value2) {
 		// TODO Auto-generated method stub
 		return false;
 	}

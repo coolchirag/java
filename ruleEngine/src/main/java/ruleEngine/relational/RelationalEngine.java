@@ -22,7 +22,7 @@ public interface RelationalEngine {
 	String IS_DUPLICATE = "ISDUPLICATE";
 	String BETWEEN = "BETWEEN";
 	
-	Set<String> singleParamOperations = new HashSet<String>(Arrays.asList(IS_BLANK, IS_DUPLICATE));
+	Set<String> singleParamOperations = new HashSet<String>(Arrays.asList(IS_BLANK));
 	
 	
 	
@@ -80,7 +80,10 @@ public interface RelationalEngine {
 			result = performGreaterThan(value1List, value2);
 			break;
 		case IS_DUPLICATE:
-			result = performIsDuplicate(value1List);
+			if(value2List==null) {
+				throw new InvalidValueException("Invalid value during : "+operation+", expected array but found single value : "+value2);
+			}
+			result = performIsDuplicate(value1List, value2List);
 			break;
 		case BETWEEN:
 			if(value2List==null) {
@@ -107,7 +110,7 @@ public interface RelationalEngine {
 	
 	public boolean performGreaterThan(List<String> value1, String value2);
 	
-	public boolean performIsDuplicate(List<String> value1);
+	public boolean performIsDuplicate(List<String> value1, List<String> value2);
 	
 	public boolean performBetween(List<String> value1, List<String> value2);
 }
