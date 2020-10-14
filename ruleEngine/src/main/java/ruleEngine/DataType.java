@@ -23,8 +23,8 @@ public class DataType {
 	public enum DataTypeEnum {
 		STRING(new StringRelationalEngine()),
 		LONG(new LongRelationalEngine()),
-		DOUBLE(new StringRelationalEngine()),
-		DATE(new StringRelationalEngine());
+		DOUBLE(new DoubleRelationalEngine()),
+		DATE(new DateRelationalEngine());
 		
 		private RelationalEngine relationalEngine;
 

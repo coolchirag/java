@@ -1,8 +1,19 @@
 package ruleEngine;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import ruleEngine.DataType.DataTypeEnum;
 import ruleEngine.domain.encounter.EncounterDomainParser;
-import ruleEngine.exception.InvalidExpression;
+import ruleEngine.exception.InvalidExpressionException;
 import ruleEngine.relational.RelationalEngine;
+import ruleEngine.utility.MultiValueMap;
+import ruleEngine.utility.Utility;
 
 public class OptimizedRuleEngine {
 
@@ -23,6 +34,7 @@ public class OptimizedRuleEngine {
 
 	public boolean execution(Object data) throws Exception {
 		boolean result = false;
+		Object copiedData = Utility.deepCopy(data);
 		while (index<rules.length) {
 			 result = false;
 			String rule = rules[index];
@@ -31,7 +43,7 @@ public class OptimizedRuleEngine {
 				index++;
 				String relationalOperator = rules[index];
 				if(!isRelationalOperator(relationalOperator)) {
-					throw new InvalidExpression("Invalid expression at index : "+index+", expression : "+rule);
+					throw new InvalidExpressionException("Invalid expression at index : "+index+", expression : "+rule);
 				} else if(RelationalEngine.singleParamOperations.contains(relationalOperator)) {
 					//result = TODO perform relationalOperation.
 				} else {
@@ -44,9 +56,8 @@ public class OptimizedRuleEngine {
 				}
 				index ++;
 			} else if (rule.equals("(")) {
-				//Do deepCopy pass to nested call.
 				index++;
-				execution(data);
+				execution(Utility.deepCopy(copiedData));
 			} else if(rule.equals(")")) {
 				index++;
 				return result;
@@ -60,10 +71,11 @@ public class OptimizedRuleEngine {
 				if(result) {
 					skipUpToLogicalOperator(AND);
 				} else {
+					data = Utility.deepCopy(copiedData);
 					index ++;
 				}
 			} else {
-				throw new InvalidExpression("Invalid expression at index : "+index+", expression : "+rule);
+				throw new InvalidExpressionException("Invalid expression at index : "+index+", expression : "+rule);
 			}
 		} 
 		return result;
@@ -77,6 +89,83 @@ public class OptimizedRuleEngine {
 			}
 			index++;
 		}
+	}
+	
+	public static Boolean performRelationalOperationOnData(Object data, String param, String operator, String value2)
+			throws Exception {
+		Boolean result = null;
+		if (param.contains(".")) {
+			int spliterIndex = param.indexOf(".");
+			Field field = data.getClass().getDeclaredField(param.substring(0, spliterIndex));
+			String childParamName = param.substring(spliterIndex + 1);
+			field.setAccessible(true);
+			Type genericType = field.getGenericType();
+			String value;
+			if (genericType instanceof ParameterizedType) {
+				if(childParamName.contains(".")) {
+					MultiValueMap<Integer, Object> filteredDataMap = new MultiValueMap<Integer, Object>();
+					Collection c = (Collection) field.get(data);
+					for (Object dataField : c) {
+						if(performRelationalOperationOnData(dataField, childParamName, operator, value2)) {
+							filteredDataMap.add(dataField.hashCode(), dataField);
+						}
+					}
+					c.clear();
+					List<Object> filterValues = filteredDataMap.getAllValues();
+					if(filterValues!=null && filterValues.size()>0) {
+						result = true;
+						filterValues.forEach(filteredData -> c.add(filteredData));
+					}
+					return result;
+					
+				} else {
+					MultiValueMap<String, Object> map = new MultiValueMap<String, Object>();
+					value = "[";
+					Collection c = (Collection) field.get(data);
+					for (Object childObject : c) {
+						Field childField = childObject.getClass().getField(childParamName);
+						childField.setAccessible(true);
+						String childValue = String.valueOf(childField.get(childObject));
+						value = value + childValue + ",";
+						map.add(childValue, childObject);
+					}
+					value = value.substring(0, value.length() - 1);
+					value = value + "]";
+					List<String> resultValues = DataType.getDataTypeEnum(field.getClass()).getRelationalEngine()
+							.executeOperation(operator, value, value2);
+					c.clear();
+					if(resultValues != null && resultValues.size()>0) {
+						resultValues.forEach(resultValue -> c.add(map.getValues(resultValue)));
+						result = true;
+					}
+				}
+				
+			} else {
+				result = performRelationalOperationOnData(field.get(data), childParamName, operator,
+						value2);
+			}
+
+		} else {
+			Field field = data.getClass().getDeclaredField(param);
+			field.setAccessible(true);
+			Type genericType = field.getGenericType();
+			String value;
+			if (genericType instanceof ParameterizedType) {
+				value = "[";
+				Collection c = (Collection) field.get(data);
+				for (Object dataValue : c) {
+					value = value + dataValue + ",";
+				}
+				value = value.substring(0, value.length() - 1);
+				value = value + "]";
+			} else {
+				value = (String) field.get(data);
+			}
+			List<String> resultValues = DataType.getDataTypeEnum(field.getClass()).getRelationalEngine()
+					.executeOperation(operator, value, value2);
+			result = resultValues != null && resultValues.size() > 0;
+		}
+		return result;
 	}
 	
 	private static boolean isParam(String expression) {

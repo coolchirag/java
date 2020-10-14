@@ -1,10 +1,15 @@
 package ruleEngine.domain.encounter.bean;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public class EncounterDetailBean {
+public class EncounterDetailBean implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String patientClass;
 	List<String> diagnosisCodes;
 	protected String payer;
@@ -42,9 +47,22 @@ public class EncounterDetailBean {
 		this.cptCodes = cptCodes;
 	}
 
-	public static class CPTCode {
+	public static class CPTCode implements Serializable {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		private String code;
 		private Integer units;
+		private Integer physicianId;
+		
+		public Integer getPhysicianId() {
+			return physicianId;
+		}
+		public void setPhysicianId(Integer physicianId) {
+			this.physicianId = physicianId;
+		}
 		public String getCode() {
 			return code;
 		}

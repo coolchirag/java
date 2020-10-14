@@ -1,12 +1,12 @@
 package ruleEngine.relational;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.naming.directory.InvalidAttributeValueException;
+import java.util.stream.Collectors;
 
 import ruleEngine.exception.InvalidValueException;
 
@@ -26,8 +26,8 @@ public interface RelationalEngine {
 	
 	
 	
-	default boolean executeOperation(String operation, String value1, String value2) {
-		boolean result = false;
+	default List<String> executeOperation(String operation, String value1, String value2) {
+		List<String> result = new ArrayList<String>();
 		
 		final List<String> value1List;
 		if(value1.startsWith("[")) {
@@ -96,21 +96,46 @@ public interface RelationalEngine {
 		return result;
 	}
 	
-	public boolean performEqualTo(List<String> value1, String value2);
+	public List<String> performEqualTo(List<String> value1, String value2);
 	
-	public boolean performNotEqualTo(List<String> value1, String value2);
+	public default List<String> performNotEqualTo(List<String> value1, String value2) {
+		List<String> equalList = performEqualTo(value1, value2);
+		value1.removeAll(equalList);
+		return value1;
+	}
 	
-	public boolean performIn(List<String> value1, List<String> value2);
+	public default List<String> performIn(List<String> value1, List<String> value2) {
+		List<String> result = new ArrayList<String>();
+		value2.forEach(value -> {
+			result.addAll(performEqualTo(value1, value));
+		});
+		return result;
+	}
 	
-	public boolean performNotIn(List<String> value1, List<String> value2);
+	public default List<String> performNotIn(List<String> value1, List<String> value2) {
+		List<String> equalList = performIn(value1, value2);
+		value1.removeAll(equalList);
+		return value1;
+	}
 	
-	public boolean performIsBlank(List<String> values1);
+	public default List<String> performIsBlank(List<String> values1) {
+		return values1.stream().filter(value -> value == null || value.isEmpty() || value.equalsIgnoreCase("null") || value.equals(" ")).collect(Collectors.toList());
+	}
 	
-	public boolean performLessThan(List<String> value1, String value2);
+	public List<String> performLessThan(List<String> value1, String value2);
 	
-	public boolean performGreaterThan(List<String> value1, String value2);
+	public List<String> performGreaterThan(List<String> value1, String value2);
 	
-	public boolean performIsDuplicate(List<String> value1, List<String> value2);
+	public default List<String> performIsDuplicate(List<String> value1, List<String> value2) {
+		List<String> duplicateList = new ArrayList<String>();
+		for(String value : value2) {
+			List<String> equalList = performEqualTo(value1, value);
+			if(equalList!=null && equalList.size()>1) {
+				duplicateList.addAll(equalList);
+			}
+		}
+		return duplicateList;
+	}
 	
-	public boolean performBetween(List<String> value1, List<String> value2);
+	public List<String> performBetween(List<String> value1, List<String> value2);
 }
