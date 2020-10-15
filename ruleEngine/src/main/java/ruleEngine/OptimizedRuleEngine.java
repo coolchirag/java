@@ -3,15 +3,9 @@ package ruleEngine;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import ruleEngine.DataType.DataTypeEnum;
-import ruleEngine.domain.encounter.EncounterDomainParser;
 import ruleEngine.exception.InvalidExpressionException;
 import ruleEngine.relational.RelationalEngine;
 import ruleEngine.utility.MultiValueMap;
