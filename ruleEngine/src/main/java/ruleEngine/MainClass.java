@@ -19,12 +19,7 @@ public class MainClass {
 		//String rule = "param_cptCodes.code";
 		String[] ruleArray = rule.split(" ");
 		
-		/*
-		 * EncounterDomainParser encDomainParser = new
-		 * EncounterDomainParser(generateEncounter()); String[] data =
-		 * encDomainParser.parse(ruleArray);
-		 */
-		
+				
 		OptimizedRuleEngine op = new OptimizedRuleEngine(ruleArray);
 		System.out.println(op.execution(generateEncounter()));
 	}
