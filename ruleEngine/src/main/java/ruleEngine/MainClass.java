@@ -22,7 +22,7 @@ public class MainClass {
 		//String rule = "param_patientClass IN [inpatient,outpatient] AND param_payer EQUAL testPayer";
 		//String rule = "param_cptCodes.code IN [cpt1] AND param_cptCodes.physicianId IN [1,2]"; //OR param_patientClass IN [inpatient,outpatient]";
 		//String rule = "( param_cptCodes.code IN [cpt1] AND param_cptCodes.physicianId IN [1,2] ) OR ( param_cptCodes.code IN [cpt2] AND param_cptCodes.physicianId IN [3,4] )"; 
-		String rule = "param_diagnosisCodes IN [code5]";
+		String rule = "param_diagnosisCodes IN [param_physician]";
 		//String rule = "param_cptCodes.code";
 		String[] ruleArray = rule.split(" ");
 		
@@ -41,7 +41,7 @@ public class MainClass {
 		EncounterDetailBean obj = new EncounterDetailBean();
 		obj.setPatientClass("inpatient");
 		obj.setPayer("testpayer");
-		obj.setDiagnosisCodes(Arrays.asList("code1","code2"));
+		obj.setDiagnosisCodes(Arrays.asList("code1","code2","phy1"));
 		obj.setPhysician("phy1");
 		CPTCode cptCode1 = new CPTCode();
 		cptCode1.setCode("cpt1");

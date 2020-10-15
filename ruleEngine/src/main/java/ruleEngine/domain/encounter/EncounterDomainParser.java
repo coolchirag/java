@@ -52,20 +52,7 @@ public class EncounterDomainParser implements DomainParser {
 	}
 	
 	public static String getParamValue(String param, Object obj) throws Exception {
-		/*
-		 * System.out.println(
-		 * "-------------------------------------------------------------"); for(Field f
-		 * : obj.getClass().getDeclaredFields()) {
-		 * System.out.println(f.getName()+" : "+f.getType()+" : "+f.getGenericType());
-		 * if (f.getGenericType() instanceof ParameterizedType) { ParameterizedType pt =
-		 * (ParameterizedType) f.getGenericType();
-		 * System.out.println("RawType : "+pt.getRawType());
-		 * System.out.println("Owner type : "+pt.getOwnerType());
-		 * System.out.println("actual type args:"); for (Type t :
-		 * pt.getActualTypeArguments()) { System.out.println("    " + t); }
-		 * 
-		 * } }
-		 */
+		
 		if(param.contains(".")) {
 			int spliterIndex = param.indexOf(".");
 			Field field = obj.getClass().getDeclaredField(param.substring(0, spliterIndex));

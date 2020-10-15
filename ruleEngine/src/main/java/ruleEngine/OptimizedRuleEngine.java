@@ -37,12 +37,9 @@ public class OptimizedRuleEngine {
 		boolean result = false;
 		Object copiedData = Utility.deepCopy(data);
 		while (index < rules.length) {
-			//result = false;
+			// result = false;
 			String rule = rules[index];
 			if (isParam(rule)) {
-				// String value1 =
-				// EncounterDomainParser.getParamValue(rule.substring(PARAM_INDICATER_LENGTH),
-				// data);
 				String value1Param = rule.substring(PARAM_INDICATER_LENGTH);
 				index++;
 				String relationalOperator = rules[index];
@@ -54,8 +51,14 @@ public class OptimizedRuleEngine {
 					index++;
 					value2 = rules[index];
 					if (isParam(value2)) {
-						value2 = EncounterDomainParser.getParamValue(value2.substring(PARAM_INDICATER_LENGTH + 1),
-								data);
+						if (value2.startsWith("[")) {
+							value2 = getParamValue(value2.substring(PARAM_INDICATER_LENGTH + 1, value2.length() - 1),
+									data);
+							value2 = "[" + value2 + "]";
+						} else {
+							value2 = getParamValue(value2.substring(PARAM_INDICATER_LENGTH), data);
+						}
+
 					}
 					result = performRelationalOperationOnData(data, value1Param, relationalOperator, value2);
 				}
@@ -187,7 +190,7 @@ public class OptimizedRuleEngine {
 	}
 
 	private static boolean isParam(String expression) {
-		return expression.startsWith(PARAM_INDICATOR);
+		return expression.startsWith(PARAM_INDICATOR) || expression.startsWith("[" + PARAM_INDICATOR);
 	}
 
 	private static boolean isRelationalOperator(String expression) {
@@ -198,4 +201,45 @@ public class OptimizedRuleEngine {
 	private static boolean isLogicalOperator(String expression) {
 		return AND.equals(expression) || OR.equals(expression);
 	}
+
+	private static String getParamValue(String param, Object obj) throws Exception {
+		String value = "";
+		if (param.contains(".")) {
+			int spliterIndex = param.indexOf(".");
+			Field field = obj.getClass().getDeclaredField(param.substring(0, spliterIndex));
+			field.setAccessible(true);
+			Type genericType = field.getGenericType();
+			if (genericType instanceof ParameterizedType) {
+
+				Collection c = (Collection) field.get(obj);
+				if (c != null && c.size() > 0) {
+					for (Object data : c) {
+						value = value + getParamValue(param.substring(spliterIndex + 1), data) + ",";
+					}
+					value = value.substring(0, value.length() - 1);
+				}
+			} else {
+				value = getParamValue(param.substring(spliterIndex + 1), field.get(obj));
+			}
+
+		} else {
+			Field field = obj.getClass().getDeclaredField(param);
+			field.setAccessible(true);
+			Type genericType = field.getGenericType();
+			if (genericType instanceof ParameterizedType) {
+
+				Collection c = (Collection) field.get(obj);
+				if (c != null && c.size() > 0) {
+					for (Object data : c) {
+						value = value + data + ",";
+					}
+					value = value.substring(0, value.length() - 1);
+				}
+			} else {
+				value = (String) field.get(obj);
+			}
+		}
+		return value;
+	}
+
 }
