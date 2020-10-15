@@ -29,9 +29,8 @@ public class OptimizedRuleEngine {
 
 	public boolean execution(Object data) throws Exception {
 		boolean result = false;
-		Object copiedData = Utility.deepCopy(data);
+		Object originalData = Utility.deepCopy(data);
 		while (index < rules.length) {
-			// result = false;
 			String rule = rules[index];
 			if (isParam(rule)) {
 				String value1Param = rule.substring(PARAM_INDICATER_LENGTH);
@@ -58,22 +57,43 @@ public class OptimizedRuleEngine {
 				}
 				index++;
 			} else if (rule.equals("(")) {
+				/*
+				 * Indicate child level rule found so copy of original data (because during child level execution it may change/filter data, but we don't want that changes at current level execution), and execute that rule separately through nested call.
+				 */
 				index++;
-				result = execution(Utility.deepCopy(copiedData));
+				result = execution(Utility.deepCopy(originalData));
 			} else if (rule.equals(")")) {
+				/*
+				 * Indicate child level rule is executed so return result to parent level executor.
+				 */
 				index++;
 				return result;
 			} else if (AND.equals(rule)) {
 				if (!result) {
+					/*
+					 * If current result is false then anything after AND is doesn't required to verify (i.e false AND anything = false). So skip expressions until you found OR operator or end of rule.
+					 * But here we need to execute remaining expression with copy of original data because during execution of previous expression it may change/filter original data, but now result is false so execute remaining expression with original data.
+					 */
 					skipUpToLogicalOperator(OR);
+					data = Utility.deepCopy(originalData);
 				} else {
+					/*
+					 * If current result is true then we need to check other expressions (i.e true AND true = true, true AND false = false).
+					 */
 					index++;
 				}
 			} else if (OR.equals(rule)) {
 				if (result) {
+					/*
+					 * If current result is true then anything after OR is doesn't required to verify (i.e true OR anything = true). So skip expressions until you found AND operator or end of rule.
+					 */
 					skipUpToLogicalOperator(AND);
 				} else {
-					data = Utility.deepCopy(copiedData);
+					/*
+					 * If current result is false then we need to check other expressions (i.e false OR true = true, false OR false = false). 
+					 * But here we need to execute remaining expression with copy of original data because during execution of previous expression it may change/filter original data, but now result is false so execute remaining expression with original data.  
+					 */
+					data = Utility.deepCopy(originalData);
 					index++;
 				}
 			} else {
@@ -84,11 +104,36 @@ public class OptimizedRuleEngine {
 		return result;
 	}
 
+	/*
+	 * Skip un required expression.
+	 */
 	private void skipUpToLogicalOperator(String logicalOperator) {
+		int countOfSubRule = 0;
 		while (index < rules.length) {
-			if (logicalOperator.equals(rules[index])) {
+			String expression = rules[index];
+			if (countOfSubRule==0 && logicalOperator.equals(expression)) {
+				/*
+				 * consider required logicalOperator when you get it at entry level of this method. Skip child level expression
+				 */
 				index++;
 				return;
+			} else if("(".equals(expression)) {
+				/*
+				 * Indicate we found child level expression.
+				 */
+				countOfSubRule++;
+			} else if(")".equals(expression)) {
+				if(countOfSubRule==0) {
+					/*
+					 * Indicate entry level expression is over.
+					 */
+					return;
+				} else {
+					/*
+					 * Indicate child level expression over.
+					 */
+					countOfSubRule++;
+				}
 			}
 			index++;
 		}
