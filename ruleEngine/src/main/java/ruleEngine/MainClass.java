@@ -34,7 +34,7 @@ public class MainClass {
 		EncounterDetailBean obj = new EncounterDetailBean();
 		obj.setPatientClass("inpatient");
 		obj.setPayer("testpayer");
-		obj.setDiagnosisCodes(Arrays.asList("code1","code2","phy1"));
+		obj.setDiagnosisCodes(Arrays.asList("code1","code2","phy2"));
 		obj.setPhysician("phy1");
 		CPTCode cptCode1 = new CPTCode();
 		cptCode1.setCode("cpt1");

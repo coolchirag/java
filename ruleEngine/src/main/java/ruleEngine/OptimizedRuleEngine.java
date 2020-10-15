@@ -54,7 +54,7 @@ public class OptimizedRuleEngine {
 						}
 
 					}
-					result = performRelationalOperationOnData(data, value1Param, relationalOperator, value2);
+					result = executeRelationalOperation(data, value1Param, relationalOperator, value2);
 				}
 				index++;
 			} else if (rule.equals("(")) {
@@ -94,7 +94,7 @@ public class OptimizedRuleEngine {
 		}
 	}
 
-	public static boolean performRelationalOperationOnData(Object data, String param, String operator, String value2)
+	public static boolean executeRelationalOperation(Object data, String param, String operator, String value2)
 			throws Exception {
 		boolean result = false;
 		if (param.contains(".")) {
@@ -110,7 +110,7 @@ public class OptimizedRuleEngine {
 					Collection c = (Collection) field.get(data);
 					if (c != null && c.size() > 0) {
 						for (Object dataField : c) {
-							if (performRelationalOperationOnData(dataField, childParamName, operator, value2)) {
+							if (executeRelationalOperation(dataField, childParamName, operator, value2)) {
 								filteredDataMap.add(dataField.hashCode(), dataField);
 							}
 						}
@@ -150,7 +150,7 @@ public class OptimizedRuleEngine {
 				}
 
 			} else {
-				result = performRelationalOperationOnData(field.get(data), childParamName, operator, value2);
+				result = executeRelationalOperation(field.get(data), childParamName, operator, value2);
 			}
 
 		} else {
