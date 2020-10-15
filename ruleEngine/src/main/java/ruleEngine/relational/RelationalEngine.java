@@ -30,13 +30,15 @@ public interface RelationalEngine {
 		List<String> result = new ArrayList<String>();
 		
 		final List<String> value1List;
-		if(value1.startsWith("[")) {
+		if(value1 == null) {
+			value1List = Collections.EMPTY_LIST;
+		} else if(value1.startsWith("[")) {
 			value1List = Arrays.asList(value1.substring(1, value1.length()-1).split(","));
 		} else {
 			value1List = Collections.singletonList(value1);
 		}
 		List<String> value2List = null;
-		if(value2.startsWith("[")) {
+		if(value2 != null && value2.startsWith("[")) {
 			value2List = Arrays.asList(value2.substring(1, value2.length()-1).split(","));
 		}
 		switch (operation) {

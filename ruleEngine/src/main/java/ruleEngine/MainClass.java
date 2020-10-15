@@ -1,9 +1,16 @@
 package ruleEngine;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import ruleEngine.domain.encounter.EncounterDomainParser;
 import ruleEngine.domain.encounter.bean.EncounterDetailBean;
@@ -12,10 +19,10 @@ import ruleEngine.domain.encounter.bean.EncounterDetailBean.CPTCode;
 public class MainClass {
 
 	public static void main(String[] args) throws Exception {
-		//String rule = "param_patientClass IN [ inpatient,outpatient ] AND param_payer EQUAL testPayer";
-		String rule = "param_cptCodes IN [ cpt1 ] AND param_cptCodes.physicianId IN [ 1,2 ] OR param_patientClass IN [ inpatient,outpatient ]";
-		//String rule = "( param_cptCodes IN [ cpt1 ] AND param_cptCodes.physicianId IN [ 1,2 ] ) OR ( param_cptCodes IN [ cpt2 ] AND param_cptCodes.physicianId IN [ 3,4 ] )"; 
-		//String rule = "param_diagnosisCodes";
+		//String rule = "param_patientClass IN [inpatient,outpatient] AND param_payer EQUAL testPayer";
+		//String rule = "param_cptCodes.code IN [cpt1] AND param_cptCodes.physicianId IN [1,2]"; //OR param_patientClass IN [inpatient,outpatient]";
+		//String rule = "( param_cptCodes.code IN [cpt1] AND param_cptCodes.physicianId IN [1,2] ) OR ( param_cptCodes.code IN [cpt2] AND param_cptCodes.physicianId IN [3,4] )"; 
+		String rule = "param_diagnosisCodes IN [code5]";
 		//String rule = "param_cptCodes.code";
 		String[] ruleArray = rule.split(" ");
 		
@@ -39,24 +46,34 @@ public class MainClass {
 		CPTCode cptCode1 = new CPTCode();
 		cptCode1.setCode("cpt1");
 		cptCode1.setUnits(2);
-		cptCode1.setPhysicianId(2);
+		cptCode1.setPhysicianId(1);
 		CPTCode cptCode2 = new CPTCode();
 		cptCode2.setCode("cpt2");
 		cptCode2.setUnits(2);
-		cptCode2.setPhysicianId(4);
-		
-		obj.setCptCodes(Arrays.asList(cptCode1, cptCode2));
+		cptCode2.setPhysicianId(3);
+		obj.setCptCodes(new ArrayList<EncounterDetailBean.CPTCode>(Arrays.asList(cptCode1, cptCode2)));
 		return obj;
 	}
 	
-	public static void main2(String[] args) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		String data1 = "5";
-		String data2 = "6";
-		Class c = Integer.class;
-		//((c) data1)
-		Method[] methods = c.getMethods();
-		Method method = c.getMethod("equals", Object.class);
-		method.invoke(data1, data2);
-		System.out.println(methods);
+	public static void main2(String[] args) throws Exception {
+		EncounterDetailBean obj = generateEncounter();
+		Field[] declaredFields = CPTCode.class.getDeclaredFields();
+		for(Field f : declaredFields) {
+			System.out.println(f.getName()+" : "+f.getGenericType());
+		}
+		
+		Field cptCodeField = EncounterDetailBean.class.getDeclaredField("cptCodes");
+		Type genericType = cptCodeField.getGenericType();
+		if (genericType instanceof ParameterizedType) {
+			ParameterizedType pt = (ParameterizedType) genericType;
+			for(Type t : pt.getActualTypeArguments()) {
+				System.out.println("--------------------------"+t);
+				Field[] fields = ((Class)t).getDeclaredFields();
+				for(Field f : fields) {
+					System.out.println(f.getName()+" : "+f.getGenericType());
+				}
+			}
+		}
+		
 	}
 }
