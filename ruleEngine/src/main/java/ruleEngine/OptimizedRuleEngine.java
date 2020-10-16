@@ -44,6 +44,9 @@ public class OptimizedRuleEngine {
 					index++;
 					value2 = rules[index];
 					if (isParam(value2)) {
+						/*
+						 * Indicate needs to compare between two parameters.
+						 */
 						if (value2.startsWith("[")) {
 							value2 = getParamValue(value2.substring(PARAM_INDICATER_LENGTH + 1, value2.length() - 1),
 									data);
@@ -143,6 +146,9 @@ public class OptimizedRuleEngine {
 			throws Exception {
 		boolean result = false;
 		if (param.contains(".")) {
+			/*
+			 * Indicate parameter is at child level.
+			 */
 			int spliterIndex = param.indexOf(".");
 			Field field = data.getClass().getDeclaredField(param.substring(0, spliterIndex));
 			String childParamName = param.substring(spliterIndex + 1);
@@ -150,7 +156,13 @@ public class OptimizedRuleEngine {
 			Type genericType = field.getGenericType();
 			String value = null;
 			if (genericType instanceof ParameterizedType) {
+				/*
+				 * Indicate child field is List type.
+				 */
 				if (childParamName.contains(".")) {
+					/*
+					 * Indicate param is at one more level child. So execute nested call for each child element and filter it out.
+					 */
 					MultiValueMap<Integer, Object> filteredDataMap = new MultiValueMap<Integer, Object>();
 					Collection c = (Collection) field.get(data);
 					if (c != null && c.size() > 0) {
@@ -168,6 +180,9 @@ public class OptimizedRuleEngine {
 					}
 
 				} else {
+					/*
+					 * Filter child elements as per relational operations.
+					 */
 					MultiValueMap<String, Object> map = new MultiValueMap<String, Object>();
 					Collection c = (Collection) field.get(data);
 					Class valueClass = String.class;
@@ -195,10 +210,16 @@ public class OptimizedRuleEngine {
 				}
 
 			} else {
+				/*
+				 * Indicate child field is object type.
+				 */
 				result = executeRelationalOperation(field.get(data), childParamName, operator, value2);
 			}
 
 		} else {
+			/*
+			 * Indicate parameter is at entry level.
+			 */
 			Field field = data.getClass().getDeclaredField(param);
 			field.setAccessible(true);
 			Type genericType = field.getGenericType();
@@ -244,12 +265,17 @@ public class OptimizedRuleEngine {
 	private static String getParamValue(String param, Object obj) throws Exception {
 		String value = "";
 		if (param.contains(".")) {
+			/*
+			 * Indicate param is at child level
+			 */
 			int spliterIndex = param.indexOf(".");
 			Field field = obj.getClass().getDeclaredField(param.substring(0, spliterIndex));
 			field.setAccessible(true);
 			Type genericType = field.getGenericType();
 			if (genericType instanceof ParameterizedType) {
-
+				/*
+				 * Indicate child field is list so concat each child value.
+				 */
 				Collection c = (Collection) field.get(obj);
 				if (c != null && c.size() > 0) {
 					for (Object data : c) {
@@ -258,10 +284,16 @@ public class OptimizedRuleEngine {
 					value = value.substring(0, value.length() - 1);
 				}
 			} else {
+				/*
+				 * Indicate child field is an object so directly get value.
+				 */
 				value = getParamValue(param.substring(spliterIndex + 1), field.get(obj));
 			}
 
 		} else {
+			/*
+			 * Indicate param is at entry level.
+			 */
 			Field field = obj.getClass().getDeclaredField(param);
 			field.setAccessible(true);
 			Type genericType = field.getGenericType();
