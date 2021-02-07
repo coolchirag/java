@@ -1,4 +1,4 @@
-package com.ezdi.ruleevaluator.constant;
+package com.chirag.ruleengin.constant;
 
 public final class RuleExpressionConstant {
 

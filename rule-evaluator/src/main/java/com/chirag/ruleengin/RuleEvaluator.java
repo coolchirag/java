@@ -1,4 +1,6 @@
-package com.ezdi.ruleevaluator;
+package com.chirag.ruleengin;
+
+import static com.chirag.ruleengin.constant.RuleExpressionConstant.*;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -8,12 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.ezdi.ruleevaluator.exception.InvalidExpressionException;
-import com.ezdi.ruleevaluator.relational.RelationalExpressionEvaluator;
-import com.ezdi.ruleevaluator.utility.MultiValueMap;
-import com.ezdi.ruleevaluator.utility.OperandDataTypeUtility;
-import com.ezdi.ruleevaluator.utility.Utility;
-import static com.ezdi.ruleevaluator.constant.RuleExpressionConstant.*;
+import com.chirag.ruleengin.exception.InvalidExpressionException;
+import com.chirag.ruleengin.relational.RelationalExpressionEvaluator;
+import com.chirag.ruleengin.utility.MultiValueMap;
+import com.chirag.ruleengin.utility.OperandDataTypeUtility;
+import com.chirag.ruleengin.utility.Utility;
 
 public class RuleEvaluator {
 

@@ -1,11 +1,10 @@
-package com.ezdi.ruleevaluator.utility;
+package com.chirag.ruleengin.utility;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.ezdi.ruleevaluator.relational.*;
-import com.ezdi.ruleevaluator.relational.RelationalExpressionEvaluator;
+import com.chirag.ruleengin.relational.*;
 
 public class OperandDataTypeUtility {
 

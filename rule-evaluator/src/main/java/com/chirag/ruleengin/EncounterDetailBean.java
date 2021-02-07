@@ -1,4 +1,4 @@
-package com.ezdi.ruleevaluator;
+package com.chirag.ruleengin;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,11 +1,11 @@
-package com.ezdi.ruleevaluator.relational;
+package com.chirag.ruleengin.relational;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ezdi.ruleevaluator.exception.InvalidOperatorException;
-import com.ezdi.ruleevaluator.utility.Utility;
+import com.chirag.ruleengin.exception.InvalidOperatorException;
+import com.chirag.ruleengin.utility.Utility;
 
 public class OperandTypeBooleanRelationalExpressionEvaluator implements RelationalExpressionEvaluator {
 

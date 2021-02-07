@@ -1,4 +1,4 @@
-package com.ezdi.ruleevaluator;
+package com.chirag.ruleengin;
 
 import java.util.ArrayList;
 import java.util.Arrays;

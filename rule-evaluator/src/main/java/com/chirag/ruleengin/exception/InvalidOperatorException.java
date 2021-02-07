@@ -1,4 +1,4 @@
-package com.ezdi.ruleevaluator.exception;
+package com.chirag.ruleengin.exception;
 
 public class InvalidOperatorException extends RuntimeException {
 

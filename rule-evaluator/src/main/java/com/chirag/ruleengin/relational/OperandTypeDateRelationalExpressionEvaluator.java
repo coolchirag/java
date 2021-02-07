@@ -1,4 +1,4 @@
-package com.ezdi.ruleevaluator.relational;
+package com.chirag.ruleengin.relational;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.ezdi.ruleevaluator.exception.InvalidOperandException;
-import com.ezdi.ruleevaluator.utility.Utility;
+import com.chirag.ruleengin.exception.InvalidOperandException;
+import com.chirag.ruleengin.utility.Utility;
 
 public class OperandTypeDateRelationalExpressionEvaluator implements RelationalExpressionEvaluator {
 	
