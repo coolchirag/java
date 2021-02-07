@@ -1,4 +1,4 @@
-package com.chirag.ruleengin;
+package com.chirag.ruleengine;
 
 import java.io.Serializable;
 import java.util.List;

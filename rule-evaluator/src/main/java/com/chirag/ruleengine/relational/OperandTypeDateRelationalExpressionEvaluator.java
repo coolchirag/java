@@ -1,4 +1,4 @@
-package com.chirag.ruleengin.relational;
+package com.chirag.ruleengine.relational;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,8 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.chirag.ruleengin.exception.InvalidOperandException;
-import com.chirag.ruleengin.utility.Utility;
+import com.chirag.ruleengine.exception.InvalidOperandException;
+import com.chirag.ruleengine.utility.Utility;
 
 public class OperandTypeDateRelationalExpressionEvaluator implements RelationalExpressionEvaluator {
 	

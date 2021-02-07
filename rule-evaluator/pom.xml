@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.chirag</groupId>
-	<artifactId>rule-evaluator</artifactId>
+	<artifactId>rule-engine</artifactId>
 	<version>1.0.4-SNAPSHOT</version>
 
 	<packaging>jar</packaging>

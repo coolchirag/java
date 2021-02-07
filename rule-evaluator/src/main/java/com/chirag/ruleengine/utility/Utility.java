@@ -1,4 +1,4 @@
-package com.chirag.ruleengin.utility;
+package com.chirag.ruleengine.utility;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

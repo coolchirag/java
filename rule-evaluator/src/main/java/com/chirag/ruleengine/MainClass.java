@@ -1,4 +1,4 @@
-package com.chirag.ruleengin;
+package com.chirag.ruleengine;
 
 import java.util.ArrayList;
 import java.util.Arrays;

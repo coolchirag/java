@@ -1,6 +1,6 @@
-package com.chirag.ruleengin;
+package com.chirag.ruleengine;
 
-import static com.chirag.ruleengin.constant.RuleExpressionConstant.*;
+import static com.chirag.ruleengine.constant.RuleExpressionConstant.*;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -10,11 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.chirag.ruleengin.exception.InvalidExpressionException;
-import com.chirag.ruleengin.relational.RelationalExpressionEvaluator;
-import com.chirag.ruleengin.utility.MultiValueMap;
-import com.chirag.ruleengin.utility.OperandDataTypeUtility;
-import com.chirag.ruleengin.utility.Utility;
+import com.chirag.ruleengine.exception.InvalidExpressionException;
+import com.chirag.ruleengine.relational.RelationalExpressionEvaluator;
+import com.chirag.ruleengine.utility.MultiValueMap;
+import com.chirag.ruleengine.utility.OperandDataTypeUtility;
+import com.chirag.ruleengine.utility.Utility;
 
 public class RuleEvaluator {
 

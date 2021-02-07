@@ -1,11 +1,11 @@
-package com.chirag.ruleengin.relational;
+package com.chirag.ruleengine.relational;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.chirag.ruleengin.exception.InvalidOperatorException;
-import com.chirag.ruleengin.utility.Utility;
+import com.chirag.ruleengine.exception.InvalidOperatorException;
+import com.chirag.ruleengine.utility.Utility;
 
 public class OperandTypeBooleanRelationalExpressionEvaluator implements RelationalExpressionEvaluator {
 

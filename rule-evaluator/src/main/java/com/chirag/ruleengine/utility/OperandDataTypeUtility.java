@@ -1,10 +1,10 @@
-package com.chirag.ruleengin.utility;
+package com.chirag.ruleengine.utility;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.chirag.ruleengin.relational.*;
+import com.chirag.ruleengine.relational.*;
 
 public class OperandDataTypeUtility {
 

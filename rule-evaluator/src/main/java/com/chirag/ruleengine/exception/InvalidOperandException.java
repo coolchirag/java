@@ -1,4 +1,4 @@
-package com.chirag.ruleengin.exception;
+package com.chirag.ruleengine.exception;
 
 public class InvalidOperandException extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package com.chirag.ruleengin.relational;
+package com.chirag.ruleengine.relational;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.chirag.ruleengin.exception.InvalidOperandException;
-import com.chirag.ruleengin.exception.InvalidOperatorException;
-import com.chirag.ruleengin.utility.Utility;
+import com.chirag.ruleengine.exception.InvalidOperandException;
+import com.chirag.ruleengine.exception.InvalidOperatorException;
+import com.chirag.ruleengine.utility.Utility;
 
 public interface RelationalExpressionEvaluator {
 

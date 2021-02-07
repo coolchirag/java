@@ -1,4 +1,4 @@
-package com.chirag.ruleengin.constant;
+package com.chirag.ruleengine.constant;
 
 public final class RuleExpressionConstant {
 
