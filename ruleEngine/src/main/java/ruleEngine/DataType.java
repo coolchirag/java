@@ -6,7 +6,7 @@ import java.util.Map;
 
 import ruleEngine.relational.*;
 
-public class DataType {
+public class DataType extends DoubleRelationalEngine {
 
 	private static final Map<Class, DataTypeEnum> dataTypeMap = new HashMap<Class, DataType.DataTypeEnum>();
 	

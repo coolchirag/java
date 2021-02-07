@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.ezdi</groupId>
+	<artifactId>rule-evaluator</artifactId>
+	<version>1.0.4-SNAPSHOT</version>
+
+	<packaging>jar</packaging>
+
+	<name>${project.artifactId}</name>
+	<description>${project.artifactId}</description>
+
+	<parent>
+		<groupId>com.ezdi.paas</groupId>
+		<artifactId>paas-parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<properties>
+		<project.scm.id>jenkins-codecommit</project.scm.id>
+	</properties>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.7.0</version>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+			</plugin>
+		</plugins>
+	</build>
+
+	<scm>
+		<connection>scm:git:https://git-codecommit.us-east-1.amazonaws.com/v1/repos/repezRuleEvaluator</connection>
+		<url>https://git-codecommit.us-east-1.amazonaws.com/v1/repos/repezRuleEvaluator</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<repositories>
+		<repository>
+			<id>ezdi-lib-release</id>
+			<name>ezdi-lib-release</name>
+			<url>http://artifactory.ezdicloud.com:8081/artifactory/ezdi-lib-release</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>ezdi-lib-release</id>
+			<name>ezdi-lib-release</name>
+			<url>http://artifactory.ezdicloud.com:8081/artifactory/ezdi-lib-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>ezdi-lib-release</id>
+			<name>ezdi-lib-release</name>
+			<url>http://artifactory.ezdicloud.com:8081/artifactory/ezdi-lib-release-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+
+</project>
