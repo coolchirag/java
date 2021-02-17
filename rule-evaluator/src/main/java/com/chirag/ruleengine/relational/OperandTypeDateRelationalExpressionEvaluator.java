@@ -13,7 +13,7 @@ import com.chirag.ruleengine.utility.Utility;
 
 public class OperandTypeDateRelationalExpressionEvaluator implements RelationalExpressionEvaluator {
 	
-	private DateFormat dateFormate = new SimpleDateFormat();
+	private DateFormat dateFormate = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 
 	@Override
 	public List<String> performEqualTo(List<String> operand1, String operand2) {
