@@ -24,9 +24,10 @@ public interface RelationalExpressionEvaluator {
 	String GREATER_THAN = "GREATER_THAN";
 	String IS_DUPLICATE = "ISDUPLICATE";
 	String BETWEEN = "BETWEEN";
+	String CONTAINS ="CONTAINS";
 	String NOT_CONTAINS ="NOTCONTAINS";
 	Set<String> DUAL_OPERAND_OPERATORS = new HashSet<String>(
-			Arrays.asList(EQUAL_TO, NOT_EQUAL_TO, IN, NOT_IN, LESS_THAN, GREATER_THAN, BETWEEN, NOT_CONTAINS));
+			Arrays.asList(EQUAL_TO, NOT_EQUAL_TO, IN, NOT_IN, LESS_THAN, GREATER_THAN, BETWEEN, CONTAINS, NOT_CONTAINS));
 	Set<String> SINGLE_OPERAND_OPERATORS = new HashSet<String>(Arrays.asList(IS_BLANK, IS_DUPLICATE, IS_NOT_BLANK));
 	Set<String> TRUE_FOR_NULL_OPERAND_RELATIONAL_OPERATORS = new HashSet<String>(Arrays.asList(NOT_EQUAL_TO, NOT_IN, IS_BLANK, NOT_CONTAINS));
 
@@ -69,6 +70,13 @@ public interface RelationalExpressionEvaluator {
 						"Invalid value during : " + operator + ", expected array but found single : " + operand2);
 			}
 			result = performNotIn(operand1List, operand2List);
+			break;
+		case CONTAINS:
+			if (operand2List.isEmpty()) {
+				throw new InvalidOperandException(
+						"Invalid value during : " + operator + ", expected array but found single : " + operand2);
+			}
+			result = performContains(operand1List, operand2List);
 			break;
 		case NOT_CONTAINS:
 			if (operand2List.isEmpty()) {
@@ -129,6 +137,14 @@ public interface RelationalExpressionEvaluator {
 	public default List<String> performNotIn(List<String> operand1, List<String> operand2) {
 		List<String> equalList = performIn(operand1, operand2);
 		operand1.removeAll(equalList);
+		return operand1;
+	}
+	
+	public default List<String> performContains(List<String> operand1, List<String> operand2) {
+		List<String> equalList = performIn(operand1, operand2);
+		if(equalList.size()==0) {
+			operand1.clear();
+		}
 		return operand1;
 	}
 	
